@@ -207,6 +207,9 @@ class TextClassifier():
         self.index_to_word = dict()
         
         ### YOUR CODE 3-4 lines
+        self.vocabulary = {word for words in word_lists for word in words}
+        self.word_to_index = {word:index for index, word in enumerate(self.vocabulary)}
+        self.index_to_word = {index:word for index, word in self.word_to_index.items()}
         ### END CODE
         
         assert len(self.word_to_index) == len(self.index_to_word)
