@@ -142,7 +142,7 @@ class TextClassifier():
             self.class_names = np.unique(labels)
         else:
             self.class_names = class_names
-        self.num_classes= np.unique(labels).size #
+        self.num_classes= np.unique(labels).size #	
         '''print('The Classes: ', self.class_names)
         print('*'*10)
         print('The first 10 inputs - should be {0}'.format(self.class_names[0]))
@@ -248,6 +248,10 @@ class TextClassifier():
         word_vectors = np.zeros((len(word_lists), len(vocabulary)))
         
         ### YOUR CODE
+        indexed_word_lists = [[index_map[word] for word in words] for words in word_lists]
+        counters = [Counter(words) for words in indexed_word_lists]
+        word_shape =  word_vectors.shape
+        word_vectors = [[counters[words_index][word] if word in counters[words_index] else 0 for word in range(word_shape[1])] for words_index in range(word_shape[0])]
         ### END CODE
         
         return word_vectors
