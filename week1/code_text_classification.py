@@ -252,6 +252,7 @@ class TextClassifier():
         counters = [Counter(words) for words in indexed_word_lists]
         word_shape =  word_vectors.shape
         word_vectors = [[counters[words_index][word] if word in counters[words_index] else 0 for word in range(word_shape[1])] for words_index in range(word_shape[0])]
+        word_vectors = np.array(word_vectors)
         ### END CODE
         
         return word_vectors
@@ -287,6 +288,10 @@ class TextClassifier():
         prior = np.zeros(self.num_classes)
         
         ### YOUR CODE 6-10 lines
+        prior = [np.sum(self.labels[:] == curr_class) / vectors.shape[0] for curr_class in range(self.num_classes)]
+        sum_words_in_classes = [np.sum(vectors[self.labels[:] == curr_class,:], axis=0) for curr_class in range(self.num_classes)]
+        print(sum_words_in_classes)
+        print([[self.index_to_word[word] for word in string] for string in sum_words_in_classes])
         ### END CODE
         
         return class_probs, prior
