@@ -43,6 +43,18 @@ ies)
             w = np.zeros(X.shape[1])       
         bestw = w
         ### YOUR CODE
+        mis_class =  lambda w: np.not_equal(np.sign(w@X.T),y)
+        E_in = lambda w: np.sum(mis_class(w))/y.shape[0]
+        E_in_best =  E_in(w)
+        n = X.shape[0]
+        for i in range(maxiter):
+            t = np.argmax(mis_class(w))
+            w += y[t]*X[t,:]
+            E_in_w = E_in(w)
+
+            if E_in_w < E_in_best:
+                E_in_best = E_in_w
+                bestw = w
         ### END CODE
         self.w = bestw
 
@@ -55,6 +67,8 @@ ies)
         """
         pred = None
         ### YOUR CODE HERE 1-2 lines
+        #pred = [np.sign(np.dot(self.w,X[i])) for i in range(X.shape[0])]
+        pred = np.sign(self.w@X.T)
         ### END CODE
         return pred
 
@@ -68,6 +82,7 @@ ies)
         """
         score = 0 
         ### YOUR CODE HERE 1-3 lines
+        score = np.mean(self.predict(X) == y)
         ### END CODE
         return score
     
@@ -154,6 +169,13 @@ def square_transform(X):
     Xt = X
 
     ### YOUR CODE HERE 2-4 lines
+    #X1 = np.outer(X[:,0],X[:,0])
+    #X2 = np.outer(X[:,1],X[:,1])
+
+    #Xt = np.transpose(np.array([np.ones(X.shape[0]), np.diag(X1), np.diag[X2]]))
+
+    X1, X2 = X.T
+    Xt = np.c_[np.ones(xt.shape[0]), X1**2, X2**2]
     ### END CODE 
     
     return Xt
@@ -207,6 +229,9 @@ def poly_transform(X):
     """
     Xt = X
     ### YOUR CODE HERE
+    dim = 4
+    X1, X2 = X.T
+    Xt = np.transpose([X1**i * X2**j for i in range(dim) for j in range(dim - i)])
     ### END CODE
     return Xt
 
@@ -226,7 +251,17 @@ def plot_data():
 
     fig, axes = plt.subplots(1, 4, figsize=(20, 20))
     
-    ### YOUR CODE 
+    ### YOUR CODE
+    xkeys=['X1','X2','X3','X4']
+    ykeys=['y1','y2','y3','y4']
+    i = 1
+    for X,Y in zip(xkeys,ykeys):
+        plt.subplot(2,2,i)
+        x = D[X]
+        y = D[Y]
+        plt.scatter(x[:,0],x[:,1],c=y, cmap=plt.cm.Paired, s=20)
+        plt.title('X' + str(i))
+        i+= 1
     ### END CODE
     plt.show()
 
